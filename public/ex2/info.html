@@ -45,7 +45,7 @@
                 while(resultDiv.firstChild) { 
                     resultDiv.firstChild.remove();
                 } 
-                h2Elem.innerText = dataObj["type"] + ":";
+                h2Elem.innerText = dataObj["type"];
                 resultDiv.appendChild(h2Elem);
                 const tableElem = document.createElement("table");
                 tableElem.className = "table";
