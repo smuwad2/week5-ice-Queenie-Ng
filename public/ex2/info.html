@@ -23,8 +23,57 @@
 
         </div>
         <script>
-            function getData() {
- 
+            async function getData() {
+                const category = document.getElementById("type").value;
+                const limit = document.getElementById("limit").value;
+                try {
+                    const response = await axios.get("/data", {
+                        "params": {
+                            "type": category,
+                            "limit": limit
+                        }
+                    });
+                    createTable(response.data);
+                }
+                catch(err) {
+                    console.log(err);
+                }
+            }
+            function createTable(dataObj) {
+                const resultDiv = document.getElementById("result");
+                const h2Elem = document.createElement("h2");
+                while(resultDiv.firstChild) { 
+                    resultDiv.firstChild.remove();
+                } 
+                h2Elem.innerText = dataObj["type"] + ":";
+                resultDiv.appendChild(h2Elem);
+                const tableElem = document.createElement("table");
+                tableElem.className = "table";
+                const tBodyElem = document.createElement("tbody");
+                // create table heading row
+                const trElem = document.createElement("tr");
+                //retrieve keys from first object on records array
+                const tblHeadings = Object.keys(dataObj["records"][0]);
+                for (const headingVal of tblHeadings) {
+                    const thElem = document.createElement("th");
+                    thElem.innerText = headingVal;
+                    trElem.appendChild(thElem);
+                }
+                tBodyElem.appendChild(trElem);
+
+                //create the inner content of table
+                for (let i=0; i<dataObj["records"].length; i++) {
+                    const trElem = document.createElement("tr");
+                    for (let j=0; j<tblHeadings.length; j++) {
+                        const tdVal = dataObj["records"][i][tblHeadings[j]];
+                        const tdElem = document.createElement("td");
+                        tdElem.innerText = tdVal;
+                        trElem.appendChild(tdElem);
+                    }
+                    tBodyElem.appendChild(trElem);
+                }
+                tableElem.appendChild(tBodyElem);
+                resultDiv.appendChild(tableElem);
             }
 
         </script>
